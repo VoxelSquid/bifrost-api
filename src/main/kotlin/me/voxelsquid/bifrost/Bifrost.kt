@@ -8,7 +8,8 @@ import java.io.File
 class Bifrost : JavaPlugin() {
 
     private val logo = listOf(" ___ _  __            _   ", "| _ |_)/ _|_ _ ___ __| |_ ", "| _ \\ |  _| '_/ _ (_-<  _|", "|___/_|_| |_| \\___/__/\\__|")
-    private lateinit var client : BifrostClient
+
+    lateinit var client : BifrostClient
 
     override fun onEnable() {
         val keys = config.getStringList("api-keys")
