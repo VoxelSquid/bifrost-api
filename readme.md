@@ -1,5 +1,5 @@
 # Bifrost API
-This is a fisrt version of Bifrost API for Spigot development.  
+This is a first version of Bifrost API for Spigot development.  
 
 ## Features:
  - **GeminiAPI** Support
