@@ -1,0 +1,23 @@
+# Get your API keys for free here: https://aistudio.google.com/app/apikey
+# It is highly recommended to add at least a few keys, the more the better.
+api-keys:
+  - ADD_YOUR_KEY_HERE
+
+# Language of the AI output. (supported languages depends on AI)
+language: English
+
+# The higher the temperature value, the more creative and unpredictable the answers will be.
+# Range: 0.0-2.0
+temperature: 2.0
+
+# Some countries (Russia, China, etc.) may have problems connecting to Gemini. Proxy can help you.
+# HTTP, SOCKS
+proxy:
+  type: HTTP
+  host: PROXY_HOST
+  port: 1337
+  user: "PROXY_USERNAME"
+  pass: "PROXY_PASSWORD"
+
+# In case of an error (unfortunately, this sometimes happens and no one is immune to it), content generation request will be resent.
+max-retries: 3

@@ -1,0 +1,4 @@
+name: Bifrost
+version: '1.0'
+main: me.voxelsquid.bifrost.Bifrost
+api-version: '1.18'
