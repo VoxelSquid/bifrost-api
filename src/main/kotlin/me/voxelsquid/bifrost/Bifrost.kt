@@ -18,7 +18,7 @@ class Bifrost : JavaPlugin() {
             server.pluginManager.disablePlugin(this)
             return
         }
-        this.client = BifrostClient(keyManager = KeyManager(config.getStringList("gemini-keys")), plugin = this)
+        this.client = BifrostClient(keyManager = KeyManager(keys), plugin = this)
         for (line in logo) this.logger.info(line)
     }
 
