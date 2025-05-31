@@ -10,6 +10,8 @@ class Bifrost : JavaPlugin() {
     private val logo = listOf(" ___ _  __            _   ", "| _ |_)/ _|_ _ ___ __| |_ ", "| _ \\ |  _| '_/ _ (_-<  _|", "|___/_|_| |_| \\___/__/\\__|")
 
     lateinit var client : BifrostClient
+    lateinit var namingStyle: String
+    lateinit var setting: String
 
     override fun onEnable() {
         val keys = config.getStringList("api-keys")
@@ -20,6 +22,8 @@ class Bifrost : JavaPlugin() {
         }
         this.client = BifrostClient(keyManager = KeyManager(keys), plugin = this)
         for (line in logo) this.logger.info(line)
+        namingStyle = config.getString("naming-style")!!
+        setting = config.getString("setting")!!
     }
 
     fun reload() {
