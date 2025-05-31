@@ -49,7 +49,7 @@ class BifrostClient(
     }.build()
 
     private val lang  = plugin.config.getString("language")!!
-    private val rules = "[Rules: `Use $lang language.`, `Do not use \" character.`] "
+    private val rules = "[Rules: `Use $lang language.`] "
     private val temp  = plugin.config.getInt("temperature")
 
     fun <T : Any> sendRequest(

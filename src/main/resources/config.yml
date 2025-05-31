@@ -29,4 +29,4 @@ proxy:
   pass: "PROXY_PASSWORD"
 
 # In case of an error (unfortunately, this sometimes happens and no one is immune to it), content generation request will be resent.
-max-retries: 3
+max-retries: 5
