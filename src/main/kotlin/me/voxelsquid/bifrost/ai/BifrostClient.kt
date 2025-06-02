@@ -91,7 +91,7 @@ class BifrostClient(
 
                             val result = body.string()
                             val cleanedData = try {
-                                findYaml(result).replace("\\\\n", "\n").replace("\\\\\\\"", "\"").replace("\\\\\"", "\"").replace("\\\"", "\"")
+                                unescapeString(findYaml(result))
                             } catch (exception: NullPointerException) {
                                 plugin.server.scheduler.runTaskLater(plugin, { _ ->
                                     plugin.logger.info("Another attempt at generative translation... If it doesn't go away, turn off generative translation and report to the developer.")
@@ -104,7 +104,6 @@ class BifrostClient(
                                 onSuccess(YamlConfiguration.loadConfiguration(StringReader(cleanedData)))
                             } catch (exception: Exception) {
                                 plugin.logger.warning("Failed to translate language.yml: ${exception.message}")
-                                exception.printStackTrace()
                             }
 
                         } ?: translate(file, onSuccess)
@@ -145,7 +144,6 @@ class BifrostClient(
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                plugin.logger.warning("Request failed: ${e.message}")
                 plugin.server.scheduler.runTaskLater(plugin, { _ ->
                     sendRequestWithRetry(prompt, responseType, onSuccess, onFailure, retries - 1)
                 }, 100L)
@@ -161,8 +159,6 @@ class BifrostClient(
                                 val parsedResponse = gson.fromJson(cleanedJson, responseType.java)
                                 onSuccess(parsedResponse)
                             } catch (e: JsonSyntaxException) {
-                                plugin.logger.warning("Failed to parse JSON: ${e.message}")
-                                plugin.logger.warning("Raw response: $rawResponse")
                                 // Попытка извлечь текст как резервный вариант
                                 val fallbackText = extractTextFallback(rawResponse)
                                 if (fallbackText != null && responseType == String::class) {
@@ -196,6 +192,13 @@ class BifrostClient(
             .replace("\n", "\\n")
             .replace("\r", "\\r")
             .replace("\t", "\\t")
+    }
+
+    private fun unescapeString(input: String): String {
+        // Заменяем \\+n на \n и \\+" на "
+        return input
+            .replace(Regex("""\\+n"""), "\n")
+            .replace(Regex("""\\+""""), "\"")
     }
 
     private fun createJsonRequest(prompt: String): String {
