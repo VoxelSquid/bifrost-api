@@ -1,5 +1,5 @@
 name: Bifrost
-version: 1.6
+version: 1.7
 main: me.voxelsquid.bifrost.Bifrost
 api-version: '1.18'
 load: STARTUP
