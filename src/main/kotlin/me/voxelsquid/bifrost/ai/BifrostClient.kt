@@ -78,7 +78,6 @@ class BifrostClient(
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                plugin.logger.warning("Request failed: ${e.message}")
                 plugin.server.scheduler.runTaskLater(plugin, { _ ->
                     translate(file, onSuccess)
                 }, 200L)
@@ -94,7 +93,6 @@ class BifrostClient(
                                 unescapeString(findYaml(result))
                             } catch (exception: NullPointerException) {
                                 plugin.server.scheduler.runTaskLater(plugin, { _ ->
-                                    plugin.logger.info("Another attempt at generative translation... If it doesn't go away, turn off generative translation and report to the developer.")
                                     translate(file, onSuccess)
                                 }, 200L)
                                 return
@@ -102,9 +100,7 @@ class BifrostClient(
 
                             try {
                                 onSuccess(YamlConfiguration.loadConfiguration(StringReader(cleanedData)))
-                            } catch (exception: Exception) {
-                                plugin.logger.warning("Failed to translate language.yml: ${exception.message}")
-                            }
+                            } catch (ignored: Exception) { }
 
                         } ?: translate(file, onSuccess)
                     } else {
@@ -170,7 +166,6 @@ class BifrostClient(
                                     }, 100L)
                                 }
                             } catch (e: Exception) {
-                                plugin.logger.severe("Unexpected error: ${e.message}")
                                 onFailure(e)
                             }
                         } ?: onFailure(IllegalStateException("Empty response body"))
@@ -249,8 +244,8 @@ class BifrostClient(
         response.body?.string()?.let { reason ->
             if (reason.lowercase().contains("quota")) {
                 key.quota = true
-                plugin.logger.info("API key quota exceeded: ${key.key}.")
-                onFailure(IllegalStateException("API key quota exceeded: ${key.key}."))
+                plugin.logger.info("Quota exceed detected. It's suggested to add more API keys to Bifrost configuration.")
+                plugin.server.scheduler.runTaskLater(plugin, { _ -> key.quota = false }, 60 * 20)
             } else {
                 plugin.logger.warning("Request failed: ${response.code}, $reason")
                 onFailure(IllegalStateException("Request failed: ${response.code}, $reason"))
