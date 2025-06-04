@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 
 class BifrostClient(
-    private val baseUrl: String = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=",
+    private val baseUrl: String = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=",
     private val keyManager: KeyManager,
     private val plugin: JavaPlugin,
     private val gson: Gson = Gson(),
@@ -71,7 +71,6 @@ class BifrostClient(
         fun findYaml(yaml: String): String {
             val regex = """```yaml([\s\S]*?)```""".toRegex()
             return regex.find(yaml)?.groups?.get(1)?.value?.trim() ?: run {
-                plugin.logger.severe(yaml)
                 throw NullPointerException("Can't find yaml pattern during generative localization task.")
             }
         }
